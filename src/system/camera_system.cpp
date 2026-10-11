@@ -5,6 +5,11 @@ CameraSystem::CameraSystem(unsigned int shader, GLFWwindow* window) {
 
     glUseProgram(shader);
     viewLocation = glGetUniformLocation(shader, "view");
+
+    //Start with the cursor hidden at the centre so the first frame
+    //doesn't read a big jump
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    glfwSetCursorPos(window, 320.0, 240.0);
 }
 
 bool CameraSystem::update(
@@ -18,7 +23,7 @@ bool CameraSystem::update(
 
     glm::vec3& right = cameraComponent.right;
     glm::vec3& up = cameraComponent.up;
-    glm::vec3& forwards = cameraComponent.forward;
+    glm::vec3& forwards = cameraComponent.forwards;
 
     forwards = {
         glm::cos(theta) * glm::cos(phi),
@@ -56,30 +61,20 @@ bool CameraSystem::update(
         return true;
     }
 
-    //Mouse: only look around while the right button is held,
-    //otherwise the cursor is left free
+    //Mouse: the cursor is put back at the window centre every frame,
+    //so its offset from the centre is how far it moved this frame.
+    //Skipped while the window is unfocused, since the cursor can't be
+    //recentred then and the camera would keep spinning.
     glm::vec3 dEulers = {0.0f, 0.0f, 0.0f};
-    glfwPollEvents();
-
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+    if (glfwGetWindowAttrib(window, GLFW_FOCUSED)) {
         double mouse_x, mouse_y;
-        if (!looking) {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            glfwGetCursorPos(window, &mouse_x, &mouse_y);
-            looking = true;
-        }
-        else {
-            glfwGetCursorPos(window, &mouse_x, &mouse_y);
-            dEulers.z = -0.1f * static_cast<float>(mouse_x - last_mouse_x);
-            dEulers.y = -0.1f * static_cast<float>(mouse_y - last_mouse_y);
-        }
-        last_mouse_x = mouse_x;
-        last_mouse_y = mouse_y;
+        glfwGetCursorPos(window, &mouse_x, &mouse_y);
+        glfwSetCursorPos(window, 320.0, 240.0);
+
+        dEulers.z = -0.1f * static_cast<float>(mouse_x - 320.0);
+        dEulers.y = -0.1f * static_cast<float>(mouse_y - 240.0);
     }
-    else if (looking) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        looking = false;
-    }
+    glfwPollEvents();
 
     eulers.y = fminf(89.0f, fmaxf(-89.0f, eulers.y + dEulers.y));
 

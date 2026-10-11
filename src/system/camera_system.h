@@ -16,6 +16,4 @@ class CameraSystem {
     unsigned int viewLocation;
     glm::vec3 global_up = {0.0f, 0.0f, 1.0f};
     GLFWwindow* window;
-    bool looking = false;
-    double last_mouse_x = 0.0, last_mouse_y = 0.0;
 };

@@ -10,7 +10,16 @@ find_package(glfw3 REQUIRED)
 
 add_executable(Revi
     src/main.cpp
+    src/glad.c
     src/config.cpp
+    src/factories/factory.cpp
+    src/view/shader.cpp
+    src/system/camera_system.cpp
+    src/system/motion_system.cpp
+    src/system/render_system.cpp
+    src/controller/app.cpp
+    src/system/animation_system.cpp
+    src/factories/mesh_factory.cpp     
 )
 
 target_include_directories(Revi PRIVATE dependencies)

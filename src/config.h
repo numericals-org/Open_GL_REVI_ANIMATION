@@ -24,3 +24,8 @@ enum class ObjectType {
     eGirl,
     eRevy
 };
+
+enum class AnimationType {
+    eNone,
+    eRun
+};

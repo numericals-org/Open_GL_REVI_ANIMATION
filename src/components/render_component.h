@@ -2,5 +2,7 @@
 #include "../config.h"
 
 struct RenderComponent {
-    unsigned int material, VAO, vertexCount;
+    ObjectType ObjectType;
+    AnimationType animationType;
+    // unsigned int material, VAO, vertexCount;
 };
