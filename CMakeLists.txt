@@ -23,7 +23,6 @@ add_executable(Revi
 )
 
 target_include_directories(Revi PRIVATE dependencies)
-
 target_link_libraries(Revi PRIVATE ${GLFW3_LIBRARY} OpenGL::GL)
 
 target_compile_definitions(Revi PRIVATE PROJECT_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
